@@ -1,18 +1,26 @@
 import React, { useState } from 'react';
 import logo from '../assets/logo.svg';
+import api from '../services/api';
 import './Login.css';
+
+
 
 export default function Login({ history }) {
     const [username, setUsername] = useState('');
 
-    function handleSubmit(evento) {
+    async function handleSubmit(evento) {
         evento.preventDefault();
 
-        console.log(username);
+        const response = await api.post('/devs', { username });
 
-        history.push('/main')
+        const { _id } = response.data;
+
+        console.log(response);
+        console.log(_id);
+
+        history.push(`/dev/${_id}`)
     }
-
+    
     return (
         <div className="login-container">
             <form onSubmit={handleSubmit}>
@@ -20,6 +28,7 @@ export default function Login({ history }) {
                 <input 
                  placeholder="Digite seu usuário no Github"
                  value={username}
+                //  value='CleitonSilvaR'
                  onChange={evento => setUsername(evento.target.value)}
                 />
 
